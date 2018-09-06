@@ -1,0 +1,34 @@
+{
+  "name": "math-game",
+  "version": "1.0.0",
+  "description": "A simple math game for multiple players",
+  "main": "app.js",
+  "dependencies": {
+    "express": "^4.16.3",
+    "gulp": "^4.0.0",
+    "gulp-babel": "^8.0.0",
+    "gulp-file-cache": "^0.0.1",
+    "socket.io": "^2.1.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/matheus-vieira/math-game.git"
+  },
+  "keywords": [
+    "game",
+    "nodejs",
+    "javascript",
+    "socket.io",
+    "react"
+  ],
+  "author": "Matheus Costa Vieira <matheus.costa.vieira@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/matheus-vieira/math-game/issues"
+  },
+  "homepage": "https://github.com/matheus-vieira/math-game#readme"
+}
