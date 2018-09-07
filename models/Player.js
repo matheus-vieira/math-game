@@ -11,18 +11,18 @@ module.exports = class Player {
     win() {
         console.log('win for player', this.id);
         this.wins++;
-        sendScore();
+        this.sendScore();
     }
 
     lost() {
         console.log('win for player', this.id);
         this.wins--;
-        sendScore();
+        this.sendScore();
     }
 
     sendScore() {
         console.log('send score');
-        this.socket.emmit('score', { score : this.wins });
+        this.socket.emit('score', { score : this.wins });
     }
 
 };

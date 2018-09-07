@@ -78,7 +78,11 @@ module.exports = class Challenge {
 
     onAnswer(data, player) {
         console.log('onAnswer');
-        if (data.answer !== this.onAnswer || processing)
+        console.log('data', data);
+        console.log('correctAnswer', this.correctAnswer);
+        console.log('answer', this.answer);
+        console.log('processing', processing);
+        if (data.answer !== this.answer || processing)
             return;
         
         processing = true;
@@ -88,7 +92,7 @@ module.exports = class Challenge {
 
         this.players.forEach(p => p.id !== player.id && p.lost());
 
-        setProgress();
+        this.setProgress();
     }
     
     setProgress() {
