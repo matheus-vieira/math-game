@@ -21,7 +21,7 @@ module.exports = class Challenge {
         this.correctAnswer = null;
         this.answer = null;
 
-        this.sendChallenge();
+        this.createChallenge();
     }
 
     getAnswer() {
@@ -62,18 +62,15 @@ module.exports = class Challenge {
     }
 
     sendChallenge() {
-        console.log('send challenge');
-        this.createChallenge();
+        console.log('sending challenge to ' + this.players.length + ' player(s)');
+        this.players.forEach(player => this.sendChallengeTo(player));
+    }
 
-        const answerCallback = p => d => this.onAnswer(d, p);
-
-        for (const key in this.players) {
-            if (this.players.hasOwnProperty(key)) {
-                const player = this.players[key];
-                player.socket.emit('newChallenge', () => this.getChallenge);
-                player.socket.on('answer', answerCallback(player));
-            }
-        }
+    sendChallengeTo(player) {
+        console.log("sending challenge to player: " + player.id);
+        player.socket.emit('newChallenge', () => this.getChallenge);
+        player.socket.on('answer', d => this.onAnswer(d, player));
+        console.log("send challenge to player: " + player.id);
     }
 
     onAnswer(data, player) {

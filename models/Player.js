@@ -5,6 +5,7 @@ module.exports = class Player {
         this.socket = socket;
         this.id = guid();
         this.wins = 0;
+        this.lost = 0;
         this.name = "New Player";
     }
 
@@ -16,13 +17,24 @@ module.exports = class Player {
 
     lost() {
         console.log('win for player', this.id);
-        this.wins--;
+        this.lost++;
         this.sendScore();
     }
 
     sendScore() {
         console.log('send score');
-        this.socket.emit('score', { score : this.wins });
+        this.socket.emit('score', {
+            wins: this.wins,
+            lost: this.lost,
+            score: this.wins - this.lost
+        });
+    }
+
+    getData() {
+        return {
+            id: this.id,
+            name: this.name
+        };
     }
 
 };

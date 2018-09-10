@@ -5,13 +5,94 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous" />
     <title>Test</title>
 </head>
 
 <body>
-    Hello world
+    <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+        <h5 class="my-0 mr-md-auto font-weight-normal">Math Game</h5>
+    </div>
+    <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+        <h1 class="display-4">Math Game</h1>
+        <p class="lead">Hello person! Welcome to my math game, I hope you enjoy</p>
+    </div>
+    <div class="container-fluid">
+        <div class="card-deck mb-3 text-center">
+            <div class="card mb-2 shadow-sm">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal"><span id="operand-a">5</span></h4>
+                </div>
+            </div>
+            <div class="card mb-2 shadow-sm">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal"><span id="operation">5</span></h4>
+                </div>
+            </div>
+            <div class="card mb-2 shadow-sm">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal"><span id="operand-b">*</span></h4>
+                </div>
+            </div>
+            <div class="card mb-2 shadow-sm">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">=</h4>
+                </div>
+            </div>
+            <div class="card mb-2 shadow-sm">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal"><span id="answer">30</span></h4>
+                </div>
+            </div>
+            <div class="card mb-2 shadow-sm">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">Players (<span id="players-count">0</span>)</h4>
+                </div>
+            </div>
+        </div>
+
+        <footer class="pt-4 my-md-5 pt-md-5 border-top">
+            <div class="row">
+                <div class="col-12 col-md">
+                    <img class="mb-2" src="../../assets/brand/bootstrap-solid.svg" alt="" width="24" height="24">
+                    <small class="d-block mb-3 text-muted">© 2017-2018</small>
+                </div>
+                <div class="col-6 col-md">
+                    <h5>Server with node</h5>
+                    <ul class="list-unstyled text-small">
+                        <li><a class="text-muted" href="#">Express.IO</a></li>
+                        <li><a class="text-muted" href="#">Socket.IO</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-md">
+                    <h5>Client</h5>
+                    <ul class="list-unstyled text-small">
+                        <li><a class="text-muted" href="#">Bootstrap</a></li>
+                        <li><a class="text-muted" href="#">jQuery (as needed by bootstrap)</a></li>
+                        <li><a class="text-muted" href="#">Pure JS</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-md">
+                    <h5>About</h5>
+                    <ul class="list-unstyled text-small">
+                        <li><a class="text-muted" href="#">Team</a></li>
+                        <li><a class="text-muted" href="#">Locations</a></li>
+                        <li><a class="text-muted" href="#">Privacy</a></li>
+                        <li><a class="text-muted" href="#">Terms</a></li>
+                    </ul>
+                </div>
+            </div>
+        </footer>
+    </div>
     <div id="hello"></div>
 
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
     <script>
         var socket = io();
