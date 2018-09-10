@@ -8,6 +8,7 @@ module.exports = class Player {
         this.wins = 0;
         this.lost = 0;
         this.name = "New Player " + counter++;
+        this.socket.emit('addPlayer', this.getData());
     }
 
     addWin() {
@@ -23,6 +24,7 @@ module.exports = class Player {
     }
 
     onNameChanged(data) {
+        if (!data || !data.name) return;
         console.log('changing player name');
         console.log('new name', data.name);
         this.name = data.name;
