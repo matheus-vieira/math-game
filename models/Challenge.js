@@ -5,15 +5,12 @@ const operators = [
     { sign: "/", method: (a, b) => b > 0 ? a / b : 0 }
 ];
 
-let processing = false;
+let processing = true;
 
 module.exports = class Challenge {
-    constructor(players) {
-        processing = false;
-
-        this.inProgress = true;
-        // shuffle the list to change the list order
-        this.players = players.sort(() => 0.5 - Math.random());
+    constructor(players, io) {
+        this.players = players;
+        this.io = io;
 
         this.operandA = null;
         this.operandB = null;
@@ -21,14 +18,13 @@ module.exports = class Challenge {
         this.correctAnswer = null;
         this.answer = null;
 
-        this.createChallenge();
+        this.nextChallenge();
     }
 
     getAnswer() {
         console.log('get answer');
         let op = this.getOperation();
-        return op.sign === this.operation.sign &&
-            op.method(this.operandA, this.operandB) === this.correctAnswer;
+        return op.method(this.operandA, this.operandB);
     }
 
     getOperation() {
@@ -43,13 +39,22 @@ module.exports = class Challenge {
         return Math.floor(Math.random() * x) + zero;
     }
 
+    clearChallenge() {
+        console.log('clear challenge');
+        this.operandA = '';
+        this.operandB = '';
+        this.operation = '';
+        this.answer = '';
+        this.correctAnswer = '';
+    }
+
     createChallenge() {
         console.log('create challenge');
         this.operandA = this.randomNumber(); // 5
         this.operandB = this.randomNumber(); // 10
         this.operation = this.getOperation(); // *
-        this.correctAnswer = this.operation.method(this.operandA, this.operandB); // 50
         this.answer = this.getAnswer();
+        this.correctAnswer = this.operation.method(this.operandA, this.operandB) === this.answer;
     }
 
     getChallenge() {
@@ -57,43 +62,50 @@ module.exports = class Challenge {
         return {
             operandA: this.operandA,
             operandB: this.operandB,
-            operation: this.operation.sign
+            operation: this.operation.sign,
+            answer: this.answer
         };
     }
 
     sendChallenge() {
+        const challenge = this.getChallenge();
         console.log('sending challenge to ' + this.players.length + ' player(s)');
-        this.players.forEach(player => this.sendChallengeTo(player));
+        this.players
+            .slice(0, 10)
+            // shuffle the list to change the list order to avoid the olders gets the challenge before
+            .sort(() => 0.5 - Math.random())
+            .forEach(player => this.sendChallengeTo(player, challenge));
     }
 
-    sendChallengeTo(player) {
+    sendChallengeTo(player, challenge) {
+        if (processing) return;
         console.log("sending challenge to player: " + player.id);
-        player.socket.emit('newChallenge', () => this.getChallenge);
+        console.log('emmiting newChallenge event');
+        player.socket.emit('newChallenge', challenge || this.getChallenge());
+        console.log('registering event answer');
         player.socket.on('answer', d => this.onAnswer(d, player));
         console.log("send challenge to player: " + player.id);
     }
 
     onAnswer(data, player) {
-        console.log('onAnswer');
-        console.log('data', data);
-        console.log('correctAnswer', this.correctAnswer);
-        console.log('answer', this.answer);
-        console.log('processing', processing);
-        if (data.answer !== this.answer || processing)
+        if (data.answer !== this.correctAnswer || processing)
             return;
-        
+
         processing = true;
-
-        console.log('correct answer');
-        player.win();
-
-        this.players.forEach(p => p.id !== player.id && p.lost());
-
-        this.setProgress();
+        player.addWin();
+        this.players.forEach(p => p.id !== player.id && p.addLost());
+        this.nextChallenge();
     }
     
-    setProgress() {
-        console.log('onAnswer');
-        setInterval(() => this.inProgress = false, 5000);
+    nextChallenge() {
+        let timeToNextChanllenge = 5000;
+        console.log('nextChallenge in ' + timeToNextChanllenge);
+        processing = true;
+        this.io.emit('nextChallenge', { players: this.players.map(p => p.getData()) });
+        setTimeout(() => {
+            processing = false;
+            this.createChallenge();
+            this.sendChallenge();
+        }, timeToNextChanllenge);
     }
 };

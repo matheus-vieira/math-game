@@ -7,25 +7,29 @@ module.exports = class GameController {
         this.io = io;
         this.challenge = null;
         this.interval = null;
+        this.challenge = new Challenge(this.players, io);
 
         this.configureSocket(io);
     }
 
     configureSocket(io) {
         this.io.sockets.on('connection', (socket) => this.connection(socket));
-        this.createChallenge();
     }
 
     connection(socket) {
         console.log('socket connection');
-        let id = this.addPlayer(socket);
-        socket.on('disconnect', () => this.disconnect(id));
+        let player = this.addPlayer(socket);
+        socket.on('disconnect', () => this.disconnect(player));
+        socket.on('nameChanged', (data) => {
+            player.onNameChanged(data);
+            this.playerListChanged();
+        });
         this.playerListChanged();
     }
 
-    disconnect(id) {
-        console.log("disconnection id: " + id);
-        var index = this.players.findIndex(p => p.id === id);
+    disconnect(player) {
+        console.log("disconnection id: " + player.id);
+        var index = this.players.findIndex(p => p.id === player.id);
         this.players.splice(index, 1);
         this.playerListChanged();
     }
@@ -35,24 +39,19 @@ module.exports = class GameController {
             socket.emit('roomfull', {
                 msg: 'This room is fill, please return later'
             });
-            return;
         }
 
         let player = new Player(socket);
         this.players.push(player);
         console.log("added a player: " + player.id);
+        this.challenge.sendChallengeTo(player);
 
-        return player.id;
+        return player;
     }
 
     playerListChanged() {
         console.log("start player list changed length: " + this.players.length);
         this.io.emit('playersChanged', { players: this.players.map(p => p.getData()) });
         console.log("end player list chaged");
-    }
-
-    createChallenge() {
-        console.log('Creating Challenge');
-        this.challenge = new Challenge(this.players);
     }
 };
