@@ -6,10 +6,11 @@
   "dependencies": {
     "express": "^4.16.3",
     "gulp": "^4.0.0",
-    "gulp-babel": "^8.0.0",
     "gulp-file-cache": "^0.0.1",
     "gulp-mocha": "^6.0.0",
     "gulp-nodemon": "^2.2.1",
+    "lodash": "^4.17.11",
+    "minimatch": "^3.0.4",
     "mocha": "^5.2.0",
     "mock-socket": "^8.0.2",
     "module-alias": "^2.1.0",
@@ -22,7 +23,9 @@
     "@serverControllers": "server/controller",
     "@utils": "utils"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "babel-core": "^6.26.3"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

@@ -105,7 +105,7 @@ module.exports = class Challenge {
     
     nextChallenge() {
         let timeToNextChallenge = 5000;
-        // console.log('nextChallenge in ' + timeToNextChanllenge);
+        console.log('nextChallenge in ' + timeToNextChallenge);
         processing = true;
         if (this.io)
             this.io.emit('nextChallenge', { players: this.players.map(p => p.getData()) });

@@ -3,17 +3,12 @@ const nodemon = require('gulp-nodemon');
 const gulpMocha = require('gulp-mocha');
 
 gulp.task('default', function () {
-    nodemon({
+    return nodemon({
         script: 'app.js',
         ext: 'js',
-        env: {
-            PORT: 2000
-        },
+        env: { PORT: 2000 },
         ignore: ['./node_modules/**']
-    })
-    .on('restart', function () {
-        console.log('Restarting');
-    });
+    }).on('restart', () => console.log('Restarting'));
 });
 
 gulp.task('test', function () {

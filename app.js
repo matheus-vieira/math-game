@@ -10,7 +10,7 @@ app.use('/client', express.static(`${__dirname}/client`));
 
 const srv = server.listen(2000);
 
-// console.log('Server started.');
+console.log('Server started.');
 
 const SOCKET_LIST = {};
 
