@@ -8,32 +8,35 @@ module.exports = class Player {
         this.wins = 0;
         this.lost = 0;
         this.name = "New Player " + counter++;
-        this.socket.emit('addPlayer', this.getData());
+
+        if (this.socket)
+            this.socket.emit('addPlayer', this.getData());
     }
 
     addWin() {
-        console.log('win for player', this.id);
+        // console.log('win for player', this.id);
         this.wins++;
         this.sendScore();
     }
 
     addLost() {
-        console.log('lost for player', this.id);
+        // console.log('lost for player', this.id);
         this.lost++;
         this.sendScore();
     }
 
     onNameChanged(data) {
         if (!data || !data.name) return;
-        console.log('changing player name');
-        console.log('new name', data.name);
+        // console.log('changing player name');
+        // console.log('new name', data.name);
         this.name = data.name;
         this.sendScore();
     }
 
     sendScore() {
-        console.log('send score');
-        this.socket.emit('score', this.getData());
+        // console.log('send score');
+        if (this.socket)
+            this.socket.emit('score', this.getData());
     }
 
     getData() {

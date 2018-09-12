@@ -8,8 +8,19 @@
     "gulp": "^4.0.0",
     "gulp-babel": "^8.0.0",
     "gulp-file-cache": "^0.0.1",
+    "gulp-mocha": "^6.0.0",
+    "gulp-nodemon": "^2.2.1",
+    "mocha": "^5.2.0",
+    "mock-socket": "^8.0.2",
+    "module-alias": "^2.1.0",
     "react-materialize": "^2.4.5",
+    "should": "^13.2.3",
     "socket.io": "^2.1.1"
+  },
+  "_moduleAliases": {
+    "@models": "models",
+    "@serverControllers": "server/controller",
+    "@utils": "utils"
   },
   "devDependencies": {},
   "scripts": {

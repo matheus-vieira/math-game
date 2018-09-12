@@ -22,25 +22,25 @@ module.exports = class Challenge {
     }
 
     getAnswer() {
-        console.log('get answer');
+        // console.log('get answer');
         let op = this.getOperation();
         return op.method(this.operandA, this.operandB);
     }
 
     getOperation() {
-        console.log('get Operation');
+        // console.log('get Operation');
         return operators[this.randomNumber(4, true)];
     }
 
     randomNumber(x = 10, allowZero = false) {
-        console.log('random number', x, allowZero);
+        // console.log('random number', x, allowZero);
         let zero = 1;
         if (allowZero) zero = 0;
         return Math.floor(Math.random() * x) + zero;
     }
 
     clearChallenge() {
-        console.log('clear challenge');
+        // console.log('clear challenge');
         this.operandA = '';
         this.operandB = '';
         this.operation = '';
@@ -49,7 +49,7 @@ module.exports = class Challenge {
     }
 
     createChallenge() {
-        console.log('create challenge');
+        // console.log('create challenge');
         this.operandA = this.randomNumber(); // 5
         this.operandB = this.randomNumber(); // 10
         this.operation = this.getOperation(); // *
@@ -58,7 +58,7 @@ module.exports = class Challenge {
     }
 
     getChallenge() {
-        console.log('get challenge');
+        // console.log('get challenge');
         return {
             operandA: this.operandA,
             operandB: this.operandB,
@@ -69,7 +69,7 @@ module.exports = class Challenge {
 
     sendChallenge() {
         const challenge = this.getChallenge();
-        console.log('sending challenge to ' + this.players.length + ' player(s)');
+        // console.log('sending challenge to ' + this.players.length + ' player(s)');
         this.players
             .slice(0, 10)
             // shuffle the list to change the list order to avoid the olders gets the challenge before
@@ -79,16 +79,16 @@ module.exports = class Challenge {
 
     sendChallengeTo(player, challenge) {
         if (processing) return;
-        console.log("sending challenge to player: " + player.id);
+        // console.log("sending challenge to player: " + player.id);
 
         // if has any listener remove them
         player.socket.removeAllListeners('answer');
 
-        console.log('emmiting newChallenge event');
+        // console.log('emmiting newChallenge event');
         player.socket.emit('newChallenge', challenge || this.getChallenge());
-        console.log('registering event answer');
+        // console.log('registering event answer');
         player.socket.on('answer', d => this.onAnswer(d, player));
-        console.log("send challenge to player: " + player.id);
+        // console.log("send challenge to player: " + player.id);
     }
 
     onAnswer(data, player) {
@@ -105,7 +105,7 @@ module.exports = class Challenge {
     
     nextChallenge() {
         let timeToNextChanllenge = 5000;
-        console.log('nextChallenge in ' + timeToNextChanllenge);
+        // console.log('nextChallenge in ' + timeToNextChanllenge);
         processing = true;
         this.io.emit('nextChallenge', { players: this.players.map(p => p.getData()) });
         setTimeout(() => {

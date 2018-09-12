@@ -17,7 +17,7 @@ module.exports = class GameController {
     }
 
     connection(socket) {
-        console.log('socket connection');
+        // console.log('socket connection');
         let player = this.addPlayer(socket);
         socket.on('disconnect', () => this.disconnect(player));
         socket.on('nameChanged', (data) => {
@@ -28,7 +28,7 @@ module.exports = class GameController {
     }
 
     disconnect(player) {
-        console.log("disconnection id: " + player.id);
+        // console.log("disconnection id: " + player.id);
         var index = this.players.findIndex(p => p.id === player.id);
         this.players.splice(index, 1);
         this.playerListChanged();
@@ -43,15 +43,15 @@ module.exports = class GameController {
 
         let player = new Player(socket);
         this.players.push(player);
-        console.log("added a player: " + player.id);
+        // console.log("added a player: " + player.id);
         this.challenge.sendChallengeTo(player);
 
         return player;
     }
 
     playerListChanged() {
-        console.log("start player list changed length: " + this.players.length);
+        // console.log("start player list changed length: " + this.players.length);
         this.io.emit('playersChanged', { players: this.players.map(p => p.getData()) });
-        console.log("end player list chaged");
+        // console.log("end player list chaged");
     }
 };
