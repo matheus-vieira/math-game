@@ -80,6 +80,10 @@ module.exports = class Challenge {
     sendChallengeTo(player, challenge) {
         if (processing) return;
         console.log("sending challenge to player: " + player.id);
+
+        // if has any listener remove them
+        player.socket.removeAllListeners('answer');
+
         console.log('emmiting newChallenge event');
         player.socket.emit('newChallenge', challenge || this.getChallenge());
         console.log('registering event answer');
@@ -88,12 +92,14 @@ module.exports = class Challenge {
     }
 
     onAnswer(data, player) {
-        if (data.answer !== this.correctAnswer || processing)
-            return;
+        if (processing) return;
 
-        processing = true;
+        if (data.answer !== this.correctAnswer) {
+            player.addLost();
+            return;
+        }
+        
         player.addWin();
-        this.players.forEach(p => p.id !== player.id && p.addLost());
         this.nextChallenge();
     }
     
