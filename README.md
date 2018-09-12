@@ -6,6 +6,12 @@ Clone:
 git clone https://github.com/matheus-vieira/math-game
 ```
 
+Go to the folder:
+
+```bash
+cd math-game
+```
+
 Install dependencies
 
 ```bash
