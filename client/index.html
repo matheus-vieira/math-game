@@ -65,35 +65,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- <div class="col col-lg-12 d-none" id="challenge">
-                        <div class="card-deck mb-3 text-center">
-                            <div class="card mb-2 shadow-sm">
-                                <div class="card-body">
-                                    <h1 class="card-title"><span id="operand-a">5</span></h1>
-                                </div>
-                            </div>
-                            <div class="card mb-2 shadow-sm">
-                                <div class="card-body">
-                                    <h1 class="card-title"><span id="operation">*</span></h1>
-                                </div>
-                            </div>
-                            <div class="card mb-2 shadow-sm">
-                                <div class="card-body">
-                                    <h1 class="card-title"><span id="operand-b">5</span></h1>
-                                </div>
-                            </div>
-                            <div class="card mb-2 shadow-sm">
-                                <div class="card-body">
-                                    <h1 class="card-title">=</h1>
-                                </div>
-                            </div>
-                            <div class="card mb-2 shadow-sm">
-                                <div class="card-body">
-                                    <h1 class="card-title"><span id="answer">30</span></h1>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
                 </div>
             </div>
             <div class="col-4">
@@ -141,31 +112,28 @@
         <footer class="pt-4 my-md-5 pt-md-5 border-top">
             <div class="row">
                 <div class="col-12 col-md">
-                    <img class="mb-2" src="https://matheus-vieira.github.io/images/author.png" alt="" width="48" height="48" />
                     <small class="d-block mb-3 text-muted">© 2017-2018</small>
                 </div>
                 <div class="col-6 col-md">
                     <h5>Server with node</h5>
                     <ul class="list-unstyled text-small">
-                        <li><a class="text-muted" href="#">Express.IO</a></li>
-                        <li><a class="text-muted" href="#">Socket.IO</a></li>
+                        <li><a class="text-muted" href="https://expressjs.com/">Express.IO</a></li>
+                        <li><a class="text-muted" href="https://socket.io/">Socket.IO</a></li>
                     </ul>
                 </div>
                 <div class="col-6 col-md">
                     <h5>Client</h5>
                     <ul class="list-unstyled text-small">
-                        <li><a class="text-muted" href="#">Bootstrap</a></li>
-                        <li><a class="text-muted" href="#">jQuery (as needed by bootstrap)</a></li>
-                        <li><a class="text-muted" href="#">Pure JS</a></li>
+                        <li><a class="text-muted" href="https://getbootstrap.com/">Bootstrap</a></li>
+                        <li><a class="text-muted" href="https://jquery.com/">jQuery (as needed by bootstrap)</a></li>
+                        <li><a class="text-muted" href="https://vanilla-js.com/">Vanilla JS</a></li>
+                        <li><a class="text-muted" href="https://socket.io/">Socket.IO</a></li>
                     </ul>
                 </div>
                 <div class="col-6 col-md">
                     <h5>About</h5>
                     <ul class="list-unstyled text-small">
-                        <li><a class="text-muted" href="#">Team</a></li>
-                        <li><a class="text-muted" href="#">Locations</a></li>
-                        <li><a class="text-muted" href="#">Privacy</a></li>
-                        <li><a class="text-muted" href="#">Terms</a></li>
+                        <li><a class="text-muted" href="https://matheus-vieira.github.io/">Matheus Costa Vieira</a></li>
                     </ul>
                 </div>
             </div>
@@ -179,90 +147,62 @@
         crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
         crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsrender/0.9.90/jsrender.min.js" integrity="sha256-btLQj6RlkxXK4cg6XHngg3OVgPdiD3QlkaYMZacCmpA=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js" integrity="sha256-+nuEu243+6BveXk5N+Vbr268G+4FHjUOEcfKaBqfPbc=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
-    <script type="text/html" id="tpl-player">
+    <script id="tpl-player" type="text/x-jsrender">
+        {{for players}}
         <li>
             <span class="badge">
-                {name}
-                <span class="badge badge-success">{wins}</span>
-                <span class="badge badge-warning">{lost}</span>
-                <span class="badge badge-info">{score}</span>
+                {{:name}}
+                <span class="badge badge-success">{{:wins}}</span>
+                <span class="badge badge-warning">{{:lost}}</span>
+                <span class="badge badge-info">{{:score}}</span>
             </span>
         </li>
+        {{/for}}
     </script>
     <script>
         (function (d) {
-            const getTemplate = id => {
-                let elem = d.getElementById(id);
-                return elem ? elem.innerHTML : "";
-            }
-            /**
-             * supplant() does variable substitution on the string. It scans through the string looking for
-             * expressions enclosed in { } braces. If an expression is found, use it as a key on the object,
-             * and if the key has a string value or number value, it is substituted for the bracket expression
-             * and it repeats.
-             *
-             * Written by Douglas Crockford
-             * http://www.crockford.com/
-             */
-            String.prototype.supplant = function (o) {
-                return this.replace(/{([^{}]*)}/g, function (a, b) {
-                    var type = typeof (o[b]);
-                    if (type === "number" || type === "string")
-                        return o[b];
-                    var r = o[b] || (function () {
-                        var r = o;
-                        b.split(".").forEach(function (e) {
-                            r = r[e] || r[e.toLowerCase()];
-                        });
-                        return r;
-                    })();
-                    return typeof r === 'string' || typeof r === 'number' ? r : a;
-                });
-            };
-            function debounce(func, wait, immediate) {
-                let timeout;
-                return function() {
-                    let context = this, args = arguments;
-                    let later = function() {
-                        timeout = null;
-                        if (!immediate) func.apply(context, args);
-                    };
-                    let callNow = immediate && !timeout;
-                    clearTimeout(timeout);
-                    timeout = setTimeout(later, wait);
-                    if (callNow) func.apply(context, args);
-                };
-            };
+            let socket = (() => {
+                let socket = io();
 
-            var socket = io();
+                function on(event, callback) {
+                    socket.on(event, callback);
+                }
+                function emit(event, data) {
+                    socket.on(event, data || {});
+                }
+                return {
+                    on: on,
+                    emit: emit
+                }
+            })();
+
+            socket.on('disconnect', () => console.log("disconnected"));
 
             function playersChangedScope() {
-                const tpl = getTemplate('tpl-player');
-                const holder = d.getElementById('players-list');
-                const countHolder = d.getElementById('players-count');
+                const $tpl = $('#tpl-player');
+                const $holder = $('#players-list');
+                const $countHolder = $('#players-count');
                 return data => {
-                    console.log('playersChanged', data);
-                    holder.innerHTML = '';
-                    data.players.forEach(p => {
-                        holder.innerHTML += tpl.supplant(p)
-                    });
-                    countHolder.innerHTML = data.players.length;
+                    $countHolder.html(data.players.length);
+                    $holder.html($tpl.render(data));
                 }
             }
             const onPlayersChanged = playersChangedScope();
             socket.on('playersChanged', onPlayersChanged);
 
             function scoreScope() {
-                const nameHolder = d.getElementById('player-name');
-                const winsHolder = d.getElementById('player-wins');
-                const lostHolder = d.getElementById('player-lost');
-                const scoreHolder = d.getElementById('player-score');
+                const $nameHolder = $('#player-name');
+                const $winsHolder = $('#player-wins');
+                const $lostHolder = $('#player-lost');
+                const $scoreHolder = $('#player-score');
                 return data => {
-                    nameHolder.innerHTML = data.name;
-                    winsHolder.innerHTML = data.wins;
-                    lostHolder.innerHTML = data.lost;
-                    scoreHolder.innerHTML = data.score;
+                    $nameHolder.html(data.name);
+                    $winsHolder.html(data.wins);
+                    $lostHolder.html(data.lost);
+                    $scoreHolder.html(data.score);
                 }
             }
             const onScore = scoreScope();
@@ -270,42 +210,41 @@
             socket.on('addPlayer', onScore);
 
             function newChallengeScope() {
-                const operandA = d.getElementById('operand-a');
-                const operandB = d.getElementById('operand-b');
-                const operation = d.getElementById('operation');
-                const answer = d.getElementById('answer');
-                const challenge = d.getElementById('challenge');
-                const wait = d.getElementById('wait');
+                const $operandA = $('#operand-a');
+                const $operandB = $('#operand-b');
+                const $operation = $('#operation');
+                const $answer = $('#answer');
+                const $challenge = $('#challenge');
+                const $wait = $('#wait');
                 return data => {
-                    console.log('newChallenge', data);
-                    wait.classList.remove("d-block");
-                    wait.classList.add("d-none");
+                    $wait.removeClass("d-block").addClass("d-none");
+                    $challenge.removeClass("d-none").addClass("d-block");
 
-                    challenge.classList.remove("d-none");
-                    challenge.classList.add("d-block");
-
-                    operandA.innerHTML = data.operandA;
-                    operandB.innerHTML = data.operandB;
-                    operation.innerHTML = data.operation;
-                    answer.innerHTML = data.answer;
+                    $operandA.html(data.operandA);
+                    $operandB.html(data.operandB);
+                    $operation.html(data.operation);
+                    $answer.html(data.answer);
                 };
             }
             const onNewChallenge = newChallengeScope();
             socket.on('newChallenge', onNewChallenge);
 
             function nextChallengeScope() {
-                const challenge = d.getElementById('challenge');
-                const wait = d.getElementById('wait');
+                const $challenge = $('#challenge');
+                const $wait = $('#wait');
                 return data => {
-                    console.log('nextChallenge', data);
-                    wait.classList.add("d-block");
-                    wait.classList.remove("d-none");
-                    challenge.classList.add("d-none");
-                    challenge.classList.remove("d-block");
+                    $wait.addClass("d-block").removeClass("d-none");
+                    $challenge.addClass("d-none").removeClass("d-block");
                     onPlayersChanged(data);
                 };
             }
             socket.on('nextChallenge', nextChallengeScope());
+
+            function roomfullScope() {
+                const $pWait = $('#wait > p');
+                return data => $pWait.html(data.msg);
+            }
+            socket.on('roomfull', roomfullScope());
 
             function setNameScope() {
                 const name = d.getElementById('txt-new-name');
@@ -316,13 +255,11 @@
             }
             const setName = setNameScope();
 
+
             // setting event listeners
-            d.getElementById('btn-new-name')
-                .addEventListener('click', debounce(() => setName(), 500));
-            d.getElementById('btn-correct')
-                .addEventListener('click', debounce(() => socket.emit('answer', { answer: true }), 500));
-            d.getElementById('btn-wrong')
-                .addEventListener('click', debounce(() => socket.emit('answer', { answer: false }), 500));
+            $('btn-new-name').click($.debounce(500, () => setName()));
+            $('btn-correct').click($.debounce(500, () => socket.emit('answer', { answer: true })));
+            $('btn-wrong').click($.debounce(500, () => socket.emit('answer', { answer: false })));
         })(document);
     </script>
 </body>

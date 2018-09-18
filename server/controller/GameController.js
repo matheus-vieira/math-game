@@ -17,29 +17,35 @@ module.exports = class GameController {
     }
 
     connection(socket) {
-        // console.log('socket connection');
-        let player = this.addPlayer(socket);
+        let player;
         socket.on('disconnect', () => this.disconnect(player));
-        socket.on('nameChanged', (data) => {
-            player.onNameChanged(data);
-            this.playerListChanged();
-        });
+
+        if (this.players.length > 9) {
+            socket.emit('roomfull', { msg: 'This room is full, please return later' });
+            socket.disconnect();
+            return;
+        }
+
+        socket.on('nameChanged', (data) =>  this.onNameChanged(player, data));
+
+        player = this.addPlayer(socket);
+        this.playerListChanged();
+    }
+
+    onNameChanged(player, data) {
+        if (!player) return;
+        player.onNameChanged(data);
         this.playerListChanged();
     }
 
     disconnect(player) {
-        // console.log("disconnection id: " + player.id);
+        if (!player) return;
         var index = this.players.findIndex(p => p.id === player.id);
         this.players.splice(index, 1);
         this.playerListChanged();
     }
 
     addPlayer(socket) {
-        if (this.players.length > 9) {
-            socket.emit('roomfull', {
-                msg: 'This room is fill, please return later'
-            });
-        }
 
         let player = new Player(socket);
         this.players.push(player);

@@ -13,28 +13,24 @@ module.exports = class Player {
             this.socket.emit('addPlayer', this.getData());
     }
 
-    addWin() {
-        // console.log('win for player', this.id);
-        this.wins++;
-        this.sendScore();
-    }
+    setScore(addWin) {
+        if (addWin) this.wins++;
+        else this.lost++;
 
-    addLost() {
-        // console.log('lost for player', this.id);
-        this.lost++;
         this.sendScore();
     }
 
     onNameChanged(data) {
         if (!data || !data.name) return;
-        // console.log('changing player name');
-        // console.log('new name', data.name);
-        this.name = data.name;
+        this.setName(data.name);
+    }
+
+    setName(newName) {
+        this.name = newName;
         this.sendScore();
     }
 
     sendScore() {
-        // console.log('send score');
         if (this.socket)
             this.socket.emit('score', this.getData());
     }
@@ -48,5 +44,4 @@ module.exports = class Player {
             score: this.wins - this.lost
         };
     }
-
 };
