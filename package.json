@@ -16,7 +16,7 @@
     "module-alias": "^2.1.0",
     "react-materialize": "^2.4.5",
     "should": "^13.2.3",
-    "socket.io": "^2.4.0"
+    "socket.io": "^2.5.0"
   },
   "_moduleAliases": {
     "@models": "models",
